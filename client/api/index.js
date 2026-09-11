@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes - YE LINES ZAROORI HAIN
+// Routes
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/students', require('./routes/studentRoutes'));
 app.use('/api/attendance', require('./routes/attendanceRoutes'));
@@ -30,7 +30,6 @@ app.get('/', (req, res) => {
 
 // MongoDB Connection
 console.log('Connecting to MongoDB...');
-console.log('MONGO_URI:', process.env.MONGO_URI ? 'Loaded' : 'Not Found');
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
@@ -41,6 +40,8 @@ mongoose.connect(process.env.MONGO_URI)
     });
   })
   .catch((err) => {
-    console.log('❌ MongoDB Connection Error:');
-    console.log(err.message);
+    console.log('❌ MongoDB Connection Error:', err.message);
   });
+
+// Vercel ke liye export
+module.exports = app;
