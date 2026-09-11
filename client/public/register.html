@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Register - Gujrat IT Centre</title>
+  <style>
+    body { font-family: Arial; background: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    h1 { color: #1e3a8a; text-align: center; margin-bottom: 20px; }
+    label { display: block; font-size: 13px; color: #555; margin-top: 10px; margin-bottom: 4px; font-weight: bold; }
+    input { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+    button { width: 100%; padding: 12px; background: #1e3a8a; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    button:hover { background: #1e40af; }
+    button:disabled { background: #999; cursor: not-allowed; }
+    .result { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; word-wrap: break-word; }
+    .success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Admin Register</h1>
+
+    <label>Full Name</label>
+    <input type="text" id="fullName" placeholder="Full Name" value="Admin">
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Email" value="info@gujratitcentre.pk">
+
+    <label>Phone</label>
+    <input type="text" id="phone" placeholder="Phone" value="0325-7882526">
+
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Password" value="admindashboard">
+
+    <button id="regBtn" onclick="register()">Register Admin</button>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function register() {
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const result = document.getElementById('result');
+      const btn = document.getElementById('regBtn');
+
+      // Validation
+      if (!fullName || !email || !password) {
+        result.style.display = 'block';
+        result.className = 'result error';
+        result.innerHTML = '<b>Error:</b> Full Name, Email aur Password zaroori hain!';
+        return;
+      }
+
+      // Loading state
+      btn.disabled = true;
+      btn.textContent = 'Registering...';
+      result.style.display = 'block';
+      result.className = 'result info';
+      result.innerHTML = 'Server se connect ho raha hai...';
+
+      try {
+        const res = await fetch('http://localhost:5000/api/admin/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, password, phone })
+        });
+
+        // Check karein response JSON hai ya HTML
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await res.text();
+          throw new Error('Server ne JSON nahi bheja. Response: ' + text.substring(0, 100));
+        }
+
+        const data = await res.json();
+
+        if (res.ok) {
+          result.className = 'result success';
+          result.innerHTML = '<b>✅ Success!</b><br>' + data.message + '<br><br><b>Ab aap login kar sakti hain!</b>';
+        } else {
+          result.className = 'result error';
+          result.innerHTML = '<b>❌ Error:</b><br>' + (data.message || data.error || 'Kuch masla hua');
+        }
+      } catch (err) {
+        result.className = 'result error';
+        result.innerHTML = '<b>❌ Connection Error:</b><br>' + err.message +
+          '<br><br><b>Check karein:</b><br>' +
+          '1. Server chal raha hai? (npm run dev)<br>' +
+          '2. URL sahi hai? (http://localhost:5000)<br>' +
+          '3. Browser ka cache clear karein (Ctrl+Shift+R)';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Register Admin';
+      }
+    }
+  </script>
+</body>
+</html>

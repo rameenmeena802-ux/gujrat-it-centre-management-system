@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-area, #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .sidebar, nav, button {
+    display: none !important;
+  }
+}
+/* Excel-Style Print Sheets */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-area, #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .excel-table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+  .excel-table th,
+  .excel-table td {
+    border: 1px solid #000 !important;
+    padding: 4px 6px !important;
+  }
+  .excel-table th {
+    background-color: #e5e7eb !important;
+    font-weight: bold !important;
+  }
+  .print-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .print-header h3 {
+    font-size: 18px !important;
+    font-weight: bold !important;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+}
+/* Modal Print Support */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-area, #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .excel-table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 11px !important;
+  }
+  .excel-table th,
+  .excel-table td {
+    border: 1px solid #000 !important;
+    padding: 4px 6px !important;
+  }
+  .excel-table th {
+    background-color: #e5e7eb !important;
+    font-weight: bold !important;
+  }
+  .print-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  .print-header h3 {
+    font-size: 18px !important;
+    font-weight: bold !important;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+}

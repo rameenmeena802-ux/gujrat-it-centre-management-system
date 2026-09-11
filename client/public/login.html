@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login - Gujrat IT Centre</title>
+  <style>
+    body { font-family: Arial; background: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    h1 { color: #1e3a8a; text-align: center; margin-bottom: 20px; }
+    label { display: block; font-size: 13px; color: #555; margin-top: 10px; margin-bottom: 4px; font-weight: bold; }
+    input { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+    button { width: 100%; padding: 12px; background: #1e3a8a; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+    button:hover { background: #1e40af; }
+    button:disabled { background: #999; cursor: not-allowed; }
+    .result { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 13px; display: none; word-wrap: break-word; }
+    .success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Admin Login</h1>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Email" value="info@gujratitcentre.pk">
+
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Password" value="admindashboard">
+
+    <button id="loginBtn" onclick="login()">Login</button>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    async function login() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const result = document.getElementById('result');
+      const btn = document.getElementById('loginBtn');
+
+      if (!email || !password) {
+        result.style.display = 'block';
+        result.className = 'result error';
+        result.innerHTML = '<b>Error:</b> Email aur Password zaroori hain!';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+      result.style.display = 'block';
+      result.className = 'result info';
+      result.innerHTML = 'Server se connect ho raha hai...';
+
+      try {
+        const res = await fetch('http://localhost:5000/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          result.className = 'result success';
+          result.innerHTML = '<b>✅ Login Successful!</b><br><br>' +
+            '<b>Admin:</b> ' + data.admin.fullName + '<br>' +
+            '<b>Email:</b> ' + data.admin.email + '<br><br>' +
+            '<b>Token:</b><br>' +
+            '<span style="word-break: break-all; font-family: monospace; font-size: 11px;">' +
+            data.token.substring(0, 60) + '...</span>';
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('adminEmail', data.admin.email);
+        } else {
+          result.className = 'result error';
+          result.innerHTML = '<b>❌ Error:</b><br>' + (data.message || data.error || 'Login failed');
+        }
+      } catch (err) {
+        result.className = 'result error';
+        result.innerHTML = '<b>❌ Connection Error:</b><br>' + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Login';
+      }
+    }
+  </script>
+</body>
+</html>
