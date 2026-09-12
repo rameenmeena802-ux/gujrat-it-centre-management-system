@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import Toast from '../components/Toast';
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('institute');
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
 
   const [institute, setInstitute] = useState({
     name: 'Gujrat IT Centre',
@@ -42,24 +48,24 @@ const Settings = () => {
 
   const saveInstitute = (e) => {
     e.preventDefault();
-    alert('Institute Settings Saved!');
+    showToast('Institute Settings Saved Successfully!', 'success');
   };
 
   const saveAdmin = (e) => {
     e.preventDefault();
     if (admin.newPassword && admin.newPassword !== admin.confirmPassword) {
-      alert('Passwords do not match!');
+      showToast('Passwords do not match!', 'error');
       return;
     }
-    alert('Admin Profile Updated!');
+    showToast('Admin Profile Updated Successfully!', 'success');
   };
 
   const saveAcademic = (e) => {
     e.preventDefault();
-    alert('Academic Settings Saved!');
+    showToast('Academic Settings Saved Successfully!', 'success');
   };
 
-  const saveNotifications = () => alert('Notification Settings Saved!');
+  const saveNotifications = () => showToast('Notification Settings Saved!', 'success');
 
   const tabs = [
     { id: 'institute', label: 'Institute Profile' },
@@ -71,6 +77,14 @@ const Settings = () => {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div>
         <h2 className="text-2xl font-bold text-gray-800">Settings</h2>
         <p className="text-gray-500 text-sm">Institute, Admin aur System settings manage karein</p>
@@ -231,14 +245,20 @@ const Settings = () => {
                 <div className="border-2 border-dashed border-green-300 bg-green-50 p-6 rounded-xl text-center">
                   <h4 className="font-semibold text-gray-700">Data Backup</h4>
                   <p className="text-xs text-gray-500 mt-1 mb-4">Apna saara data backup karein</p>
-                  <button onClick={() => alert('Backup started!')} className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700">
+                  <button
+                    onClick={() => showToast('Backup Started Successfully!', 'success')}
+                    className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700"
+                  >
                     Download Backup
                   </button>
                 </div>
                 <div className="border-2 border-dashed border-blue-300 bg-blue-50 p-6 rounded-xl text-center">
                   <h4 className="font-semibold text-gray-700">Data Restore</h4>
                   <p className="text-xs text-gray-500 mt-1 mb-4">Purana backup upload karein</p>
-                  <button onClick={() => alert('Restore coming soon!')} className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700">
+                  <button
+                    onClick={() => showToast('Restore feature coming soon!', 'error')}
+                    className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
+                  >
                     Upload Backup
                   </button>
                 </div>
