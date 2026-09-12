@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/student-visiting';
+const API_URL = 'https://gujrat-it-centre-management-system.onrender.com/api/student-visiting';
 
 const StudentVisiting = () => {
   const [visitors, setVisitors] = useState([]);

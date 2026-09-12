@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/student-query';
+const API_URL = 'https://gujrat-it-centre-management-system.onrender.com/api/student-query';
 
 const StudentQuery = () => {
   const [queries, setQueries] = useState([]);

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const API = {
-  fees: 'http://localhost:5000/api/student-fee',
-  students: 'http://localhost:5000/api/students'
+  fees: 'https://gujrat-it-centre-management-system.onrender.com/api/student-fee',
+  students: 'https://gujrat-it-centre-management-system.onrender.com/api/students'
 };
 
 const Reports = () => {

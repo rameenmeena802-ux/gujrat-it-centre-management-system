@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-const STUDENTS_URL = 'http://localhost:5000/api/students';
-const ATTENDANCE_URL = 'http://localhost:5000/api/attendance';
+const STUDENTS_URL = 'https://gujrat-it-centre-management-system.onrender.com/api/students';
+const ATTENDANCE_URL = 'https://gujrat-it-centre-management-system.onrender.com/api/attendance';
 
 const Attendance = () => {
   const [studentsList, setStudentsList] = useState([]);

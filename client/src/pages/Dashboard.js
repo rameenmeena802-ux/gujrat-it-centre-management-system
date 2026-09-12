@@ -7,14 +7,14 @@ import {
 } from 'recharts';
 
 const API = {
-  students: 'http://localhost:5000/api/students',
-  attendance: 'http://localhost:5000/api/attendance',
-  expenses: 'http://localhost:5000/api/expenses',
-  courses: 'http://localhost:5000/api/courses',
-  queries: 'http://localhost:5000/api/student-query',
-  visitors: 'http://localhost:5000/api/student-visiting',
-  fees: 'http://localhost:5000/api/student-fee',
-  staff: 'http://localhost:5000/api/staff-salary'
+  students: 'https://gujrat-it-centre-management-system.onrender.com/api/students',
+  attendance: 'https://gujrat-it-centre-management-system.onrender.com/api/attendance',
+  expenses: 'https://gujrat-it-centre-management-system.onrender.com/api/expenses',
+  courses: 'https://gujrat-it-centre-management-system.onrender.com/api/courses',
+  queries: 'https://gujrat-it-centre-management-system.onrender.com/api/student-query',
+  visitors: 'https://gujrat-it-centre-management-system.onrender.com/api/student-visiting',
+  fees: 'https://gujrat-it-centre-management-system.onrender.com/api/student-fee',
+  staff: 'https://gujrat-it-centre-management-system.onrender.com/api/staff-salary'
 };
 
 const Dashboard = () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/admin';
+const API_URL = 'https://gujrat-it-centre-management-system.onrender.com/api/admin';
 
 const Login = () => {
   const navigate = useNavigate();
