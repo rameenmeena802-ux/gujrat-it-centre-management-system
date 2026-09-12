@@ -57,7 +57,7 @@ const Login = () => {
             Welcome Back, <br /> Admin!
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-           Manage your entire IT Centre — Students, Fees, Attendance, Courses and much more.
+            Manage your entire IT Centre — Students, Fees, Attendance, Courses and much more.
           </p>
 
           <div className="mt-10 space-y-4 text-gray-700">
@@ -109,7 +109,7 @@ const Login = () => {
           <div className="bg-white p-8 rounded-2xl shadow-2xl">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-800">Admin Login</h2>
-              <p className="text-gray-500 text-sm mt-2">Apne account mein login karein</p>
+              <p className="text-gray-500 text-sm mt-2">Sign in to your account</p>
             </div>
 
             {error && (
@@ -194,7 +194,9 @@ const Login = () => {
 
             <p className="text-center text-xs text-gray-400 mt-6">
               Secure Login | Powered by Gujrat IT Centre
-              Design & Developed by Rameen
+            </p>
+            <p className="text-center text-xs text-gray-400 mt-1">
+              Design & Developed by <span className="font-semibold text-[#1e3a8a]">Rameen</span>
             </p>
           </div>
         </div>
