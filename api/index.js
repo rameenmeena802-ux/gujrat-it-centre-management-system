@@ -26,8 +26,17 @@ app.get('/', (req, res) => {
   res.send('Gujrat IT Centre API is running...');
 });
 
+// MongoDB Connection + Server Start
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected Successfully'))
-  .catch((err) => console.log('❌ MongoDB Error:', err.message));
+  .then(() => {
+    console.log('✅ MongoDB Connected Successfully');
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log('❌ MongoDB Error:', err.message);
+  });
 
 module.exports = app;
