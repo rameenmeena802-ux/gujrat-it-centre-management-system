@@ -30,7 +30,7 @@ const Login = () => {
       navigate('/');
       window.location.reload();
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Server chal raha hai?');
+      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
       setLoading(false);
     }
   };
@@ -57,7 +57,7 @@ const Login = () => {
             Welcome Back, <br /> Admin!
           </h2>
           <p className="mt-4 text-lg text-gray-600">
-            Apne IT Centre ko manage karein — Students, Fees, Attendance, Courses aur bohot kuch.
+           Manage your entire IT Centre — Students, Fees, Attendance, Courses and much more.
           </p>
 
           <div className="mt-10 space-y-4 text-gray-700">
@@ -194,6 +194,7 @@ const Login = () => {
 
             <p className="text-center text-xs text-gray-400 mt-6">
               Secure Login | Powered by Gujrat IT Centre
+              Design & Developed by Rameen
             </p>
           </div>
         </div>
