@@ -6,8 +6,11 @@ const API_URL = 'https://gujrat-it-centre-management-system.onrender.com/api/stu
 const StudentFee = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editData, setEditData] = useState({});
   const [formData, setFormData] = useState({
-    date: '', studentName: '', regNo: '', fatherName: '',
+    date: '', voucherNo: '', studentName: '', regNo: '', fatherName: '',
     studentContact: '', guardianContact: '', course: '', classMode: 'Physical',
     totalCourseFee: '', admissionFee: '', installment1: '', installment2: '', installment3: ''
   });
@@ -87,7 +90,7 @@ const StudentFee = () => {
       });
       alert('Student Fee Record Added!');
       setFormData({
-        date: '', studentName: '', regNo: '', fatherName: '',
+        date: '', voucherNo: '', studentName: '', regNo: '', fatherName: '',
         studentContact: '', guardianContact: '', course: '', classMode: 'Physical',
         totalCourseFee: '', admissionFee: '', installment1: '', installment2: '', installment3: ''
       });
@@ -104,6 +107,52 @@ const StudentFee = () => {
       fetchFees();
     } catch (err) {
       alert('Error: ' + err.message);
+    }
+  };
+
+  // ============ EDIT HANDLERS ============
+  const handleEditClick = (student) => {
+    setEditingId(student._id);
+    setEditData({
+      date: student.date || '',
+      voucherNo: student.voucherNo || '',
+      studentName: student.studentName || '',
+      regNo: student.regNo || '',
+      fatherName: student.fatherName || '',
+      studentContact: student.studentContact || '',
+      guardianContact: student.guardianContact || '',
+      course: student.course || '',
+      classMode: student.classMode || 'Physical',
+      totalCourseFee: student.totalCourseFee || 0,
+      admissionFee: student.admissionFee || 0,
+      installment1: student.installment1 || 0,
+      installment2: student.installment2 || 0,
+      installment3: student.installment3 || 0
+    });
+    setShowEditModal(true);
+  };
+
+  const handleEditChange = (e) => {
+    setEditData({ ...editData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`${API_URL}/${editingId}`, {
+        ...editData,
+        totalCourseFee: Number(editData.totalCourseFee),
+        admissionFee: Number(editData.admissionFee) || 0,
+        installment1: Number(editData.installment1) || 0,
+        installment2: Number(editData.installment2) || 0,
+        installment3: Number(editData.installment3) || 0
+      });
+      alert('Fee Record Updated Successfully!');
+      setShowEditModal(false);
+      setEditingId(null);
+      fetchFees();
+    } catch (err) {
+      alert('Error: ' + (err.response?.data?.error || err.message));
     }
   };
 
@@ -168,6 +217,7 @@ const StudentFee = () => {
         <h3 className="text-lg font-semibold text-gray-700 mb-4">Add New Fee Record</h3>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <input type="date" name="date" value={formData.date} onChange={handleChange} required className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#1e3a8a]" />
+          <input type="text" name="voucherNo" placeholder="Voucher Number" value={formData.voucherNo} onChange={handleChange} className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#1e3a8a]" />
           <input type="text" name="studentName" placeholder="Student Name" value={formData.studentName} onChange={handleChange} required className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#1e3a8a]" />
           <input type="text" name="regNo" placeholder="Reg No" value={formData.regNo} onChange={handleChange} required className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#1e3a8a]" />
           <input type="text" name="fatherName" placeholder="Father Name" value={formData.fatherName} onChange={handleChange} required className="border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#1e3a8a]" />
@@ -223,6 +273,7 @@ const StudentFee = () => {
               <thead>
                 <tr className="bg-gray-200 text-gray-800">
                   <th className="p-2 border border-gray-400 text-center font-bold">S.No</th>
+                  <th className="p-2 border border-gray-400 font-bold">Voucher No</th>
                   <th className="p-2 border border-gray-400 font-bold">Reg No</th>
                   <th className="p-2 border border-gray-400 font-bold">Student Name</th>
                   <th className="p-2 border border-gray-400 font-bold">Father Name</th>
@@ -242,7 +293,7 @@ const StudentFee = () => {
               </thead>
               <tbody>
                 {filteredStudents.length === 0 ? (
-                  <tr><td colSpan="16" className="p-3 text-center text-gray-500 border border-gray-400">No records found. Add your first fee record!</td></tr>
+                  <tr><td colSpan="17" className="p-3 text-center text-gray-500 border border-gray-400">No records found. Add your first fee record!</td></tr>
                 ) : (
                   filteredStudents.map((s, index) => {
                     const paid = calculatePaidFee(s);
@@ -251,6 +302,7 @@ const StudentFee = () => {
                     return (
                       <tr key={s._id} className="hover:bg-gray-50">
                         <td className="p-2 border border-gray-400 text-center">{index + 1}</td>
+                        <td className="p-2 border border-gray-400 font-semibold text-purple-700">{s.voucherNo || '-'}</td>
                         <td className="p-2 border border-gray-400 font-semibold text-[#1e3a8a]">{s.regNo}</td>
                         <td className="p-2 border border-gray-400 font-semibold">{s.studentName}</td>
                         <td className="p-2 border border-gray-400">{s.fatherName}</td>
@@ -270,6 +322,7 @@ const StudentFee = () => {
                           <span className={`px-2 py-1 rounded text-xs font-semibold ${statusColors[status]}`}>{status}</span>
                         </td>
                         <td className="p-2 border border-gray-400 text-center no-print">
+                          <button onClick={() => handleEditClick(s)} className="text-blue-600 hover:underline text-xs mr-2">Edit</button>
                           <button onClick={() => handleDelete(s._id)} className="text-red-600 hover:underline text-xs">Delete</button>
                         </td>
                       </tr>
@@ -280,7 +333,7 @@ const StudentFee = () => {
               {filteredStudents.length > 0 && (
                 <tfoot>
                   <tr className="bg-gray-800 text-white font-bold">
-                    <td className="p-2 border border-gray-400" colSpan="7">TOTAL ({filteredStudents.length} Students)</td>
+                    <td className="p-2 border border-gray-400" colSpan="8">TOTAL ({filteredStudents.length} Students)</td>
                     <td className="p-2 border border-gray-400">Rs. {summary.totalFee.toLocaleString()}</td>
                     <td className="p-2 border border-gray-400" colSpan="4"></td>
                     <td className="p-2 border border-gray-400 text-green-300">Rs. {summary.totalPaid.toLocaleString()}</td>
@@ -293,6 +346,86 @@ const StudentFee = () => {
           )}
         </div>
       </div>
+
+      {/* ============ EDIT MODAL ============ */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[9999] p-4 no-print">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-[#1e3a8a] text-white p-5 rounded-t-2xl flex justify-between items-center">
+              <h3 className="text-xl font-bold">Edit Fee Record</h3>
+              <button onClick={() => setShowEditModal(false)} className="bg-white bg-opacity-20 hover:bg-opacity-40 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold">×</button>
+            </div>
+            <form onSubmit={handleUpdateSubmit} className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Date</label>
+                <input type="date" name="date" value={editData.date} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Voucher No</label>
+                <input type="text" name="voucherNo" value={editData.voucherNo} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Student Name</label>
+                <input type="text" name="studentName" value={editData.studentName} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Reg No</label>
+                <input type="text" name="regNo" value={editData.regNo} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Father Name</label>
+                <input type="text" name="fatherName" value={editData.fatherName} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Student Contact</label>
+                <input type="text" name="studentContact" value={editData.studentContact} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Guardian Contact</label>
+                <input type="text" name="guardianContact" value={editData.guardianContact} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Course</label>
+                <input type="text" name="course" value={editData.course} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Class Mode</label>
+                <select name="classMode" value={editData.classMode} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg">
+                  {classModeOptions.map((m) => <option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Total Course Fee</label>
+                <input type="number" name="totalCourseFee" value={editData.totalCourseFee} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Admission Fee</label>
+                <input type="number" name="admissionFee" value={editData.admissionFee} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">1st Installment</label>
+                <input type="number" name="installment1" value={editData.installment1} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">2nd Installment</label>
+                <input type="number" name="installment2" value={editData.installment2} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">3rd Installment</label>
+                <input type="number" name="installment3" value={editData.installment3} onChange={handleEditChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              </div>
+              <div className="md:col-span-3 flex gap-3 mt-2">
+                <button type="button" onClick={() => setShowEditModal(false)} className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 font-semibold">
+                  Cancel
+                </button>
+                <button type="submit" className="flex-1 bg-[#1e3a8a] text-white py-3 rounded-lg hover:bg-[#1e40af] font-semibold">
+                  Update Record
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
