@@ -269,7 +269,7 @@ const StudentFee = () => {
         </div>
         <div className="overflow-x-auto">
           {loading ? <p className="text-center p-6 text-gray-500">Loading...</p> : (
-            <table className="w-full text-left text-xs excel-table">
+            <table className="w-full text-left text-[10px] excel-table">
               <thead>
                 <tr className="bg-gray-200 text-gray-800">
                   <th className="p-2 border border-gray-400 text-center font-bold">S.No</th>
