@@ -10,7 +10,6 @@ const studentSchema = new mongoose.Schema({
   classMode: { type: String, enum: ['Online', 'Physical', 'Hybrid'], default: 'Physical' },
   classTiming: { type: String, default: 'Morning' },
   totalFee: { type: Number, required: true },
-  admissionFee: { type: Number, default: 0 },
   paidFee: { type: Number, default: 0 },
   status: { type: String, default: 'Active' }
 }, { timestamps: true });

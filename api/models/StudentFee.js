@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const studentFeeSchema = new mongoose.Schema({
   date: { type: String, required: true },
-  voucherNo: { type: String, default: '' },
   studentName: { type: String, required: true },
   regNo: { type: String, required: true },
   fatherName: { type: String, required: true },
