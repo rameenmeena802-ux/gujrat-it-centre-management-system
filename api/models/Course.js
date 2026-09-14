@@ -6,7 +6,8 @@ const courseSchema = new mongoose.Schema({
   platform: { type: String, default: '' },
   duration: { type: String, required: true },
   totalFee: { type: Number, required: true },
-  description: { type: String, default: '' }
+  description: { type: String, default: '' },
+  detail: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Course', courseSchema);
